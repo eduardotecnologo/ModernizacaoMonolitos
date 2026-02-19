@@ -1,0 +1,102 @@
+@startuml HotelReservationSystem
+
+' Definição dos Enums
+enum PaymentStatus {
+  Pending = 1
+  Processing = 2
+  Completed = 3
+  Failed = 4
+  Refunded = 5
+}
+
+enum ReservationStatus {
+  Pending = 1
+  Paid = 2
+  Cancelled = 3
+  Rejected = 4
+  Refunded = 5
+}
+
+' Definição das Classes
+class Payment {
+  +Id : Guid
+  +ReservationId : Guid
+  +Amount : Money
+  +Status : PaymentStatus
+  +ProcessedAt : DateTime
+  +TransactionId : string
+}
+
+class Reservation {
+  +Id : Guid
+  +HotelId : Guid
+  +RoomTypeId : Guid
+  +StayPeriod : DateRange
+  +Status : ReservationStatus
+  +GuestId : Guid
+  +RoomQuantity : int
+  +TotalAmount : Money
+  +CreatedAt : DateTime
+}
+
+class Guest {
+  +Id : Guid
+  +FirstName : string
+  +LastName : string
+  +Email : Email
+  +FullName : string
+  +UserId : Guid
+}
+
+class Room {
+  +Id : Guid
+  +HotelId : Guid
+  +RoomTypeId : Guid
+  +Floor : int
+  +Number : string
+  +IsAvailable : bool
+}
+
+class RoomTypeRate {
+  +Id : Guid
+  +HotelId : Guid
+  +RoomTypeId : Guid
+  +Date : DateTime
+  +Rate : Money
+}
+
+class RoomTypeInventory {
+  +Id : Guid
+  +HotelId : Guid
+  +RoomTypeId : Guid
+  +Date : DateTime
+  +TotalInventory : int
+  +TotalReserved : int
+  +AvailableInventory : int
+}
+
+class RoomType {
+  +Id : Guid
+  +Description : string
+}
+
+class Hotel {
+  +Id : Guid
+  +Name : string
+  +Address : Address
+}
+
+' Relacionamentos
+Payment --> Reservation
+Reservation --> Guest
+Reservation --> Hotel
+Reservation --> RoomType
+Room --> RoomType
+Room --> Hotel
+RoomTypeRate --> RoomType
+RoomTypeRate --> Hotel
+RoomTypeInventory --> RoomType
+RoomTypeInventory --> Hotel
+Hotel --> Address
+
+@enduml
